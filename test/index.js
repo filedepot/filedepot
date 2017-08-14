@@ -1,2 +1,2 @@
-require('./welcome');
+require('./tokens');
 require('./errors');
