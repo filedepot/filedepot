@@ -10,7 +10,7 @@ module.exports = (app) => {
       return res.send(JSON.stringify(obj));
     };
     next();
-  })
+  });
 
   let endpoints = [
     'buckets',

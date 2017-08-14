@@ -5,7 +5,7 @@ const models = require('../models');
 const authFailed = require('../libraries/auth-failed-res');
 
 module.exports = (req, res, next) => {
-  var token = req.body.token || req.query.token || req.headers['authorization'];
+  var token = req.body.token || req.query.token || req.headers.authorization;
   if (!token) {
     return authFailed(res);
   }

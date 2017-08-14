@@ -27,8 +27,8 @@ module.exports = (model, field, createPromise, logging) => {
           throw idDuplicateError;
         }
         return Promise.resolve();
-      })
-  }
+      });
+  };
 
   let generateAndCheckPromise = () => {
     let identifier = randomstring.generate(length);
