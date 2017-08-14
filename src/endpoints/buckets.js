@@ -11,14 +11,14 @@ const path = require('path');
 
 let noop = () => {};
 
-let storage = multer.diskStorage({
-  filename: (req, file, callback) => {
-    callback(null, file.fieldname + '-' + Date.now());
-  }
-});
+// configure a disk storage location for multer
 const upload = multer({
   dest: process.env.TEMP_UPLOAD_PATH,
-  storage: storage
+  storage: multer.diskStorage({
+    filename: (req, file, callback) => {
+      callback(null, file.fieldname + '-' + Date.now());
+    }
+  })
 });
 
 module.exports = router;
@@ -26,6 +26,7 @@ module.exports = router;
 let preflightCorsDelegate = (req, callback) => {
   let origin = req.header('origin');
   var corsOptions = { origin: false };
+  // check origin against access key's origin
   if (origin === req.key.origin) {
     corsOptions.origin = true;
   }
