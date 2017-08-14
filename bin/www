@@ -1,0 +1,62 @@
+#!/usr/bin/env node
+
+require('dotenv').config({ silent: true });
+const cluster = require('cluster');
+const debug = require('debug')('bin');
+const http = require('http');
+const models = require("../src/models/");
+const os = require('os');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || 3000);
+
+if (cluster.isMaster && !process.env.SINGLE_THREAD) {
+  let startApp = () => {
+    let cpuCount = os.cpus().length;
+
+    // Create a worker for each CPU
+    for (var i = 0; i < cpuCount; ++i) {
+      cluster.fork();
+    }
+  };
+
+  cluster.on('exit', (worker, code, signal) => {
+    console.log('[INFO] Worker ' + worker.process.pid + ' died');
+  });
+
+  if (models && process.env.DB_SYNC) {
+    models.sequelize
+      .sync({logging: console.log})
+      .then(startApp);
+  } else {
+    console.log('[WARN] Starting app, but database not synchronized.');
+    startApp();
+  }
+} else {
+  console.log('[INFO] Worker %d #%d running!', cluster.worker.id, cluster.worker.process.pid);
+  const server = require('../src/server');
+  server.start(port);
+}
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}

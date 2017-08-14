@@ -1,0 +1,2 @@
+require('./welcome');
+require('./errors');
