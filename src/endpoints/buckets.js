@@ -6,7 +6,8 @@ const NotFoundError = require('../libraries/notFoundError');
 const crypto = require('crypto');
 const cors = require('cors');
 const multer = require('multer');
-const fs = require('fs');
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs'));
 const path = require('path');
 
 let noop = () => {};
@@ -53,22 +54,22 @@ router.put('/:bucketId/objects/:filename', require('../middlewares/tokenAuth'), 
 
       let pathnameHash = hashFilename(bucket, filename);
 
-      var existCount = 0;
       let originalExt = path.extname(req.file.originalname);
-      var finalFilename = pathnameHash + originalExt;
-      var finalPathname = path.join(bucket.path, finalFilename);
-      while (fs.existsSync(path)) {
-        finalFilename = pathnameHash + '.' + existCount + originalExt;
-        finalPathname = path.join(bucket.path, finalFilename);
-        ++existCount;
-      }
-      fs.rename(req.file.path, finalPathname, noop);
+      let finalFilename = pathnameHash + originalExt;
+      let finalPathname = path.join(bucket.path, finalFilename);
 
       res
         .json({
-          "status": "ok",
-          "result": finalFilename.toLowerCase()
+          "status": "ok"
         });
+
+      if (fs.existsSync(finalPathname)) {
+        return fs.unlink(finalPathname)
+          .then(() => {
+            return fs.rename(req.file.path, finalPathname);
+          });
+      }
+      return fs.rename(req.file.path, finalPathname);
     })
     .catch(errorResponse(res));
 });
