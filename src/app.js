@@ -46,22 +46,25 @@ app.use((req, res, next) => {
 // will print stacktrace
 if (process.env.NODE_ENV === 'development') {
   app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.json({
-      message: err.message,
-      error: err
-    });
+    res
+      .status(err.status || 500)
+      .json({
+        "msg": err.message,
+        "status": "error",
+        "err": err
+      });
   });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json({
-    message: err.message,
-    error: {}
-  });
+  res
+    .status(err.status || 500)
+    .json({
+      "msg": err.message,
+      "status": "error"
+    });
 });
 
 module.exports = app;
