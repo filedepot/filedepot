@@ -21,7 +21,7 @@ module.exports = (req, res, next) => {
   models.Key
     .findOne({
       where: {
-        keyId: decoded.keyId
+        keyId: keyId
       },
       logging: false
     })
