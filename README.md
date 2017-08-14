@@ -17,6 +17,12 @@ when the file uploader page is served. When Bob chooses the PDF file and clicks 
 Bob's computer directly to Timebolt. Timebolt will check to ensure that the token was created to put a file in the corresponding bucket managed by Timebolt. If
 the access token checks out fine, the file is placed in the Bucket's path on the server's file system and the file name is returned to the browser for further processing.
 
+## Requirements
+
+- NodeJS >= v6.3.0
+- A DBMS supported by [Sequelize](http://docs.sequelizejs.com/)
+- Storage location that can be read from or written to by Timebolt when deployed
+
 ## API References
 
 All API endpoints are prefixed with `/v1` to impose versioning on the API.
