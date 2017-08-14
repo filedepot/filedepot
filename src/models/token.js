@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         "allowNull": false
       },
       "filename": {
-        "type": DataTypes.CHAR(80),
+        "type": DataTypes.CHAR(64),
         "allowNull": false
       }
     },
