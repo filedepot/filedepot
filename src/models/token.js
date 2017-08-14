@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       "method": {
         "type": DataTypes.CHAR(8),
         "allowNull": false
+      },
+      "filename": {
+        "type": DataTypes.CHAR(80),
+        "allowNull": false
       }
     },
     {

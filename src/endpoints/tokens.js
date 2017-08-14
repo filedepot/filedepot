@@ -15,6 +15,7 @@ router.post('/', require('../middlewares/keyAuth'), (req, res, next) => {
   let clientUserAgent = req.body.userAgent;
   let clientIpAddress = req.body.ipAddress;
   let requestMethod = req.body.method;
+  let requestFilename = req.body.filename
 
   var state = {};
 
@@ -26,7 +27,8 @@ router.post('/', require('../middlewares/keyAuth'), (req, res, next) => {
           KeyKeyId: req.key.keyId,
           identitySignature: state.hash,
           dateExpiry: moment().add(2, 'minutes'),
-          method: requestMethod
+          method: requestMethod,
+          filename: requestFilename
         },
         {
           transaction: t,
