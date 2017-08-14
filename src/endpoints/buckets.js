@@ -56,7 +56,6 @@ router.put('/:bucketId', require('../middlewares/tokenAuth'), cors(preflightCors
         finalPathname = path.join(bucket.path, finalFilename);
         ++existCount;
       }
-      fs.rename(req.file.path, finalPathname);
       fs.rename(req.file.path, finalPathname, noop);
 
       res
