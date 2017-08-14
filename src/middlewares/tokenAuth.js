@@ -39,6 +39,11 @@ module.exports = (req, res, next) => {
           throw new Error('Token has expired');
         }
 
+        let reqMethod = req.method.toLowerCase();
+        if (token.method.toLowerCase().split(/,/g).indexOf(reqMethod) === -1) {
+          throw new Error('Method not allowed');
+        }
+
         req.token = token;
         req.key = token.Key;
         next();
