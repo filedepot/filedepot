@@ -62,7 +62,34 @@ router.put('/:bucketId', require('../middlewares/tokenAuth'), cors(preflightCors
       res
         .json({
           "status": "ok",
-          "result": finalFilename
+          "result": finalFilename.toLowerCase()
+        });
+    })
+    .catch(errorResponse(res));
+});
+
+router.delete('/:bucketId/:filename', require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
+  let bucketId = req.params.bucketId;
+  let filename = req.params.filename.toLowerCase();
+
+  // ensure permissions is given for the correct file
+  if (req.token.filename.toLowerCase() !== filename) {
+    return errorResponse(res)(new Error('File operation invalid'));
+  }
+
+  req.key.getBucket()
+    .then((bucket) => {
+      if (!bucket || bucket.bucketId !== bucketId) {
+        throw new NotFoundError('Bucket not found');
+      }
+
+      let pathnameActual = path.join(bucket.path, filename);
+
+      fs.unlink(pathnameActual, noop);
+
+      res
+        .json({
+          "status": "ok"
         });
     })
     .catch(errorResponse(res));
@@ -70,7 +97,7 @@ router.put('/:bucketId', require('../middlewares/tokenAuth'), cors(preflightCors
 
 router.get('/:bucketId/:filename', (req, res, next) => {
   let bucketId = req.params.bucketId;
-  let filename = req.params.filename;
+  let filename = req.params.filename.toLowerCase();
 
   models.Bucket
     .findOne({ where: { bucketId: { $eq: bucketId } } })
