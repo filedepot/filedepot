@@ -7,9 +7,13 @@ module.exports = (sequelize, DataTypes) => {
         "type": DataTypes.CHAR(8),
         "primaryKey": true
       },
-      "path":{
+      "path": {
         "type": DataTypes.STRING(1024),
         "allowNull": false
+      },
+      "postProcessor": {
+        "type": DataTypes.STRING(1024),
+        "allowNull": true
       }
     },
     {
