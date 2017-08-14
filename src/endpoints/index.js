@@ -26,7 +26,8 @@ module.exports = (app) => {
       return res
         .status(404)
         .json({
-          "error": "The resource is not found."
+          "msg": "The resource is not found.",
+          "status": "error"
         });
     }
 
