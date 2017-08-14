@@ -9,6 +9,12 @@ Basic operations include:
   - Creation of one-time tokens for protected access to server storage directly from the browser
   - Upload / delete files on the server with tokens
 
+## Coming Soon
+
+- CLI Tool to manage buckets and access keys to buckets
+- HEAD method to provide information about a given file in a bucket
+- Large file (in parts) support
+
 ## Use Cases
 
 When Bob wants to upload a PDF document to your website, Bob opens your website's file uploader. Before the file uploader page was served to Bob,
