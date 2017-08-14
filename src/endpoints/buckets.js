@@ -82,14 +82,13 @@ router.delete('/:bucketId/:filename', require('../middlewares/tokenAuth'), cors(
         throw new NotFoundError('Bucket not found');
       }
 
-      let pathnameActual = path.join(bucket.path, filename);
-
-      fs.unlink(pathnameActual, noop);
-
       res
         .json({
           "status": "ok"
         });
+
+      let pathnameActual = path.join(bucket.path, filename);
+      fs.unlink(pathnameActual, noop);
     })
     .catch(errorResponse(res));
 });
