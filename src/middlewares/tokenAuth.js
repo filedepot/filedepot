@@ -29,8 +29,6 @@ module.exports = (req, res, next) => {
         if (!token) {
           throw new Error('Invalid token');
         }
-        // token access attempted, destroy token immediately
-        token.destroy({ transaction: t });
 
         let content = req.headers['user-agent'] + '&&' + req.ip;
         if (!bcrypt.compareSync(content, token.identitySignature)) {
@@ -41,9 +39,11 @@ module.exports = (req, res, next) => {
           throw new Error('Token has expired');
         }
 
-        req.key = token.key;
+        req.key = token.Key;
         next();
-        return null;
+
+        // token access attempted, destroy token immediately
+        return token.destroy({ transaction: t });
       })
       .catch((err) => {
         return authFailed(res);
