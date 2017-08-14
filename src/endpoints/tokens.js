@@ -8,6 +8,7 @@ const moment = require("moment");
 const bcrypt = require('bcryptjs');
 const errorResponse = require('../libraries/error-res');
 const NotFoundErrror = require('../libraries/notFoundError');
+const hashFilename = require('../libraries/hashFilename');
 
 module.exports = router;
 
@@ -15,7 +16,7 @@ router.post('/', require('../middlewares/keyAuth'), (req, res, next) => {
   let clientUserAgent = req.body.userAgent;
   let clientIpAddress = req.body.ipAddress;
   let requestMethod = req.body.method;
-  let requestFilename = req.body.filename
+  let requestFilename = hashFilename(req.key.BucketBucketId, req.body.filename);
 
   var state = {};
 

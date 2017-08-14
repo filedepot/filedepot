@@ -3,12 +3,12 @@ const router = express.Router();
 const models = require('../models');
 const errorResponse = require('../libraries/error-res');
 const NotFoundError = require('../libraries/notFoundError');
-const crypto = require('crypto');
 const cors = require('cors');
 const multer = require('multer');
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 const path = require('path');
+const hashFilename = require('../libraries/hashFilename');
 
 let noop = () => {};
 
@@ -34,12 +34,7 @@ let preflightCorsDelegate = (req, callback) => {
   callback(null, corsOptions);
 };
 
-let hashFilename = (bucket, filename) => {
-  var sha256Hash = crypto.createHash('sha256');
-  sha256Hash.update(bucket.bucketId + '@@' + filename);
-  let hash = sha256Hash.digest('hex');
-  return hash;
-}
+
 
 router.options('/:bucketId/objects', require('../middlewares/preflightTokenAuth'), cors(preflightCorsDelegate));
 router.put('/:bucketId/objects/:filename', require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
@@ -52,7 +47,7 @@ router.put('/:bucketId/objects/:filename', require('../middlewares/tokenAuth'), 
         throw new NotFoundError('Bucket not found');
       }
 
-      let pathnameHash = hashFilename(bucket, filename);
+      let pathnameHash = hashFilename(bucket.bucketId, filename);
 
       let originalExt = path.extname(req.file.originalname);
       let finalFilename = pathnameHash + originalExt;
@@ -83,7 +78,7 @@ router.delete('/:bucketId/objects/:filename', require('../middlewares/tokenAuth'
     return errorResponse(res)(new Error('File operation invalid'));
   }
 
-  let pathnameHash = hashFilename(bucket, filename);
+  let pathnameHash = hashFilename(bucket.bucketId, filename);
 
   req.key.getBucket()
     .then((bucket) => {
@@ -106,7 +101,7 @@ router.get('/:bucketId/objects/:filename', (req, res, next) => {
   let bucketId = req.params.bucketId;
   let filename = req.params.filename.toLowerCase();
 
-  let pathnameHash = hashFilename(bucket, filename);
+  let pathnameHash = hashFilename(bucket.bucketId, filename);
 
   models.Bucket
     .findOne({ where: { bucketId: { $eq: bucketId } } })
