@@ -33,8 +33,8 @@ let preflightCorsDelegate = (req, callback) => {
   callback(null, corsOptions);
 };
 
-router.options('/:bucketId', require('../middlewares/preflightTokenAuth'), cors(preflightCorsDelegate));
-router.put('/:bucketId', require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
+router.options('/:bucketId/objects', require('../middlewares/preflightTokenAuth'), cors(preflightCorsDelegate));
+router.put('/:bucketId/objects', require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
   let reqBucketId = req.params.bucketId;
   let filename = req.body.filename;
 
@@ -68,7 +68,7 @@ router.put('/:bucketId', require('../middlewares/tokenAuth'), cors(preflightCors
     .catch(errorResponse(res));
 });
 
-router.delete('/:bucketId/:filename', require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
+router.delete('/:bucketId/objects/:filename', require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
   let bucketId = req.params.bucketId;
   let filename = req.params.filename.toLowerCase();
 
@@ -94,7 +94,7 @@ router.delete('/:bucketId/:filename', require('../middlewares/tokenAuth'), cors(
     .catch(errorResponse(res));
 });
 
-router.get('/:bucketId/:filename', (req, res, next) => {
+router.get('/:bucketId/objects/:filename', (req, res, next) => {
   let bucketId = req.params.bucketId;
   let filename = req.params.filename.toLowerCase();
 
