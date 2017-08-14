@@ -1,16 +1,15 @@
 {
-  "name": "rcowl-api",
+  "name": "timebolt",
   "version": "1.0.0",
-  "description": "API Server for RCOwl",
+  "description": "Timebolt is an open-sourced and self-managed file storage API service.",
   "main": "bin/www",
   "scripts": {
     "start": "node bin/www",
     "test": "mocha"
   },
   "author": "Sam-Mauris Yong",
-  "repository": "https://github.com/mauris/rcowl-api",
-  "license": "LicenseRef-LICENSE",
-  "private": true,
+  "repository": "https://github.com/mauris/timebolt",
+  "license": "MIT",
   "engines": {
     "node": "^6.3.0"
   },
