@@ -33,6 +33,13 @@ let preflightCorsDelegate = (req, callback) => {
   callback(null, corsOptions);
 };
 
+let hashFilename = (bucket, filename) => {
+  var sha256Hash = crypto.createHash('sha256');
+  sha256Hash.update(bucket.bucketId + '@@' + filename);
+  let hash = sha256Hash.digest('hex');
+  return hash;
+}
+
 router.options('/:bucketId/objects', require('../middlewares/preflightTokenAuth'), cors(preflightCorsDelegate));
 router.put('/:bucketId/objects/:filename', require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
   let reqBucketId = req.params.bucketId;
@@ -44,9 +51,7 @@ router.put('/:bucketId/objects/:filename', require('../middlewares/tokenAuth'), 
         throw new NotFoundError('Bucket not found');
       }
 
-      var sha256Hash = crypto.createHash('sha256');
-      sha256Hash.update(bucket.bucketId + '@@' + filename + '@@' + req.file.originalname);
-      let pathnameHash = sha256Hash.digest('hex');
+      let pathnameHash = hashFilename(bucket, filename);
 
       var existCount = 0;
       let originalExt = path.extname(req.file.originalname);
@@ -77,6 +82,8 @@ router.delete('/:bucketId/objects/:filename', require('../middlewares/tokenAuth'
     return errorResponse(res)(new Error('File operation invalid'));
   }
 
+  let pathnameHash = hashFilename(bucket, filename);
+
   req.key.getBucket()
     .then((bucket) => {
       if (!bucket || bucket.bucketId !== bucketId) {
@@ -88,8 +95,8 @@ router.delete('/:bucketId/objects/:filename', require('../middlewares/tokenAuth'
           "status": "ok"
         });
 
-      let pathnameActual = path.join(bucket.path, filename);
-      fs.unlink(pathnameActual, noop);
+      let pathnameActual = path.join(bucket.path, pathnameHash);
+      return fs.unlink(pathnameActual);
     })
     .catch(errorResponse(res));
 });
@@ -98,6 +105,8 @@ router.get('/:bucketId/objects/:filename', (req, res, next) => {
   let bucketId = req.params.bucketId;
   let filename = req.params.filename.toLowerCase();
 
+  let pathnameHash = hashFilename(bucket, filename);
+
   models.Bucket
     .findOne({ where: { bucketId: { $eq: bucketId } } })
     .then((bucket) => {
@@ -105,11 +114,11 @@ router.get('/:bucketId/objects/:filename', (req, res, next) => {
         throw new NotFoundError('Bucket not found');
       }
 
-      if (!fs.existsSync(path.join(bucket.path, filename))) {
+      if (!fs.existsSync(path.join(bucket.path, pathnameHash))) {
         throw new NotFoundError('File not found');
       }
 
-      res.sendfile(filename, { root: bucket.path });
+      res.sendfile(pathnameHash, { root: bucket.path, dotfiles: 'deny' });
     })
     .catch(errorResponse(res));
 });
