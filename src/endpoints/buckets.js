@@ -9,7 +9,15 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 
-const upload = multer({ dest: process.env.TEMP_UPLOAD_PATH });
+let storage = multer.diskStorage({
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+});
+const upload = multer({
+  dest: process.env.TEMP_UPLOAD_PATH,
+  storage: storage
+});
 
 module.exports = router;
 
@@ -71,7 +79,7 @@ router.get('/:bucketId/:filename', (req, res, next) => {
       if (!fs.existsSync(path.join(bucket.path, filename))) {
         throw new NotFoundError('File not found');
       }
-      
+
       res.sendfile(filename, { root: bucket.path });
     })
     .catch(errorResponse(res));
