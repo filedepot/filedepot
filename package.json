@@ -13,6 +13,9 @@
   "engines": {
     "node": "^6.3.0"
   },
+  "bin": {
+    "filedepot": "./bin/cli"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.0",
