@@ -9,6 +9,8 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 
+let noop = () => {};
+
 let storage = multer.diskStorage({
   filename: (req, file, callback) => {
     callback(null, file.fieldname + '-' + Date.now());
@@ -55,7 +57,7 @@ router.put('/:bucketId', require('../middlewares/tokenAuth'), cors(preflightCors
         ++existCount;
       }
       fs.rename(req.file.path, finalPathname);
-      fs.rename(req.file.path, finalPathname, () => {});
+      fs.rename(req.file.path, finalPathname, noop);
 
       res
         .json({
