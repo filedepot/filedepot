@@ -7,12 +7,16 @@ module.exports = (sequelize, DataTypes) => {
         "type": DataTypes.CHAR(32),
         "primaryKey": true
       },
-      "dateExpiry":{
+      "dateExpiry": {
         "type": DataTypes.DATE,
         "allowNull": false
       },
-      "identitySignature":{
+      "identitySignature": {
         "type": DataTypes.CHAR(60),
+        "allowNull": false
+      },
+      "method": {
+        "type": DataTypes.CHAR(8),
         "allowNull": false
       }
     },
