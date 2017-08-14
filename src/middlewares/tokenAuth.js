@@ -39,6 +39,7 @@ module.exports = (req, res, next) => {
           throw new Error('Token has expired');
         }
 
+        req.token = token;
         req.key = token.Key;
         next();
 
