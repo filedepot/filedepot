@@ -114,7 +114,9 @@ router.get('/:bucketId/objects/:filename', (req, res, next) => {
         throw new NotFoundError('File not found');
       }
 
-      res.sendfile(pathnameHash, { root: bucket.path, dotfiles: 'deny' });
+      res
+        .sendfile(pathnameHash, { root: bucket.path, dotfiles: 'deny' })
+        .contentType(filename);
     })
     .catch(errorResponse(res));
 });
