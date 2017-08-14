@@ -1,14 +1,14 @@
 {
-  "name": "timebolt",
+  "name": "filedepot",
   "version": "1.0.0",
-  "description": "Timebolt is an open-sourced and self-managed file storage API service.",
+  "description": "FileDepot is an open-sourced and self-managed file storage API service.",
   "main": "bin/www",
   "scripts": {
     "start": "node bin/www",
     "test": "mocha"
   },
   "author": "Sam-Mauris Yong",
-  "repository": "https://github.com/mauris/timebolt",
+  "repository": "https://github.com/mauris/filedepot",
   "license": "MIT",
   "engines": {
     "node": "^6.3.0"
