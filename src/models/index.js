@@ -22,6 +22,7 @@ var sequelize = new Sequelize(
 fs
   .readdirSync(__dirname)
   .filter((file) => {
+    // skip '.', '..' and 'index.js' files in dir
     return (file.indexOf(".") !== 0) && (file !== "index.js");
   })
   .forEach((file) => {
@@ -29,11 +30,13 @@ fs
     db[model.name] = model;
   });
 
-Object.keys(db).forEach((modelName) => {
-  if ("associate" in db[modelName]) {
-    db[modelName].associate(db);
-  }
-});
+Object
+  .keys(db)
+  .forEach((modelName) => {
+    if ("associate" in db[modelName]) {
+      db[modelName].associate(db);
+    }
+  });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
