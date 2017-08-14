@@ -14,6 +14,7 @@ module.exports = router;
 router.post('/', require('../middlewares/keyAuth'), (req, res, next) => {
   let clientUserAgent = req.body.userAgent;
   let clientIpAddress = req.body.ipAddress;
+  let requestMethod = req.body.method;
 
   var state = {};
 
@@ -24,7 +25,8 @@ router.post('/', require('../middlewares/keyAuth'), (req, res, next) => {
           tokenId: id,
           KeyKeyId: req.key.keyId,
           identitySignature: state.hash,
-          dateExpiry: moment().add(2, 'minutes')
+          dateExpiry: moment().add(2, 'minutes'),
+          method: requestMethod
         },
         {
           transaction: t,
