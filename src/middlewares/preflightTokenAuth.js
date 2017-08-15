@@ -3,6 +3,7 @@ const jwt = Promise.promisifyAll(require('jsonwebtoken'));
 const bcrypt = Promise.promisifyAll(require('bcryptjs'));
 const models = require('../models');
 const authFailed = require('../libraries/auth-failed-res');
+const sha256 = require('../libraries/sha256');
 
 /**
   This middleware checks for authorization by access token without deleting the token
