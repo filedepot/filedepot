@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "node"
+  - "6"
+  - "6.1"
+env:
+  - NODE_ENV=development
+  - DB_NAME=filedepot
+  - DB_USER=root
+  - DB_PASS=password
+  - "DB_CONFIG={"host": "localhost", "dialect": "mysql", "port": 3306}"
+  - API_AUTH_SECRET=somerandomstring
+  - DB_SYNC=0
+  - TOKEN_LIFE_MINUTES=2
