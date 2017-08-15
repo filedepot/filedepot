@@ -1,3 +1,4 @@
+const fs = require('fs-extra');
 
 require('dotenv').config({ silent: true });
 fs.copy('test/test.sqlite', 'test/test.tmp.sqlite');
