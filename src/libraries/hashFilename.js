@@ -1,10 +1,7 @@
-const crypto = require('crypto');
+const sha256 = require('./sha256');
 
 let hashFilename = (bucketId, filename) => {
-  var sha256Hash = crypto.createHash('sha256');
-  sha256Hash.update(bucketId + '@@' + filename);
-  let hash = sha256Hash.digest('hex');
-  return hash;
+  return sha256(bucketId + '@@' + filename);
 }
 
 module.exports = hashFilename;
