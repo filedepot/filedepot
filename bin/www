@@ -3,7 +3,6 @@
 require('dotenv').config({ silent: true });
 const cluster = require('cluster');
 const debug = require('debug')('bin');
-const http = require('http');
 const models = require("../src/models/");
 const os = require('os');
 
