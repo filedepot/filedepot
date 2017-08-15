@@ -114,8 +114,8 @@ router.get('/:bucketId/objects/:filename*', (req, res, next) => {
       }
 
       res
-        .sendfile(pathnameHash, { root: bucket.path, dotfiles: 'deny' })
-        .contentType(filename);
+        .contentType(filename)
+        .sendfile(pathnameHash, { root: bucket.path, dotfiles: 'deny' });
     })
     .catch(errorResponse(res));
 });
