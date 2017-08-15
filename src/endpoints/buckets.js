@@ -34,11 +34,13 @@ let preflightCorsDelegate = (req, callback) => {
   callback(null, corsOptions);
 };
 
-router.options('/:bucketId/objects', require('../middlewares/preflightTokenAuth'), cors(preflightCorsDelegate));
+let objectRoute = router.route('/:bucketId/objects/:objName(\*)');
 
-router.put('/:bucketId/objects/:filename*', require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
+objectRoute.options(require('../middlewares/preflightTokenAuth'), cors(preflightCorsDelegate));
+
+objectRoute.put(require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
   let reqBucketId = req.params.bucketId;
-  let filename = req.params.filename;
+  let objName = req.params.objName;
 
   req.key.getBucket()
     .then((bucket) => {
@@ -46,7 +48,7 @@ router.put('/:bucketId/objects/:filename*', require('../middlewares/tokenAuth'),
         throw new NotFoundError('Bucket not found');
       }
 
-      let pathnameHash = hashFilename(bucket.bucketId, filename);
+      let pathnameHash = hashFilename(bucket.bucketId, objName);
       let finalPathname = path.join(bucket.path, pathnameHash);
 
       res
@@ -65,12 +67,12 @@ router.put('/:bucketId/objects/:filename*', require('../middlewares/tokenAuth'),
     .catch(errorResponse(res));
 });
 
-router.delete('/:bucketId/objects/:filename*', require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
+objectRoute.delete(require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
   let bucketId = req.params.bucketId;
-  let filename = req.params.filename.toLowerCase();
+  let objName = req.params.objName.toLowerCase();
 
   // ensure permissions is given for the correct file
-  if (req.token.filename.toLowerCase() !== filename) {
+  if (req.token.objName.toLowerCase() !== objName) {
     return errorResponse(res)(new Error('File operation invalid'));
   }
 
@@ -80,7 +82,7 @@ router.delete('/:bucketId/objects/:filename*', require('../middlewares/tokenAuth
         throw new NotFoundError('Bucket not found');
       }
 
-      let pathnameHash = hashFilename(bucket.bucketId, filename);
+      let pathnameHash = hashFilename(bucket.bucketId, objName);
 
       res
         .json({
@@ -93,9 +95,9 @@ router.delete('/:bucketId/objects/:filename*', require('../middlewares/tokenAuth
     .catch(errorResponse(res));
 });
 
-router.get('/:bucketId/objects/:filename*', (req, res, next) => {
+objectRoute.get((req, res, next) => {
   let bucketId = req.params.bucketId;
-  let filename = req.params.filename.toLowerCase();
+  let objName = req.params.objName.toLowerCase();
 
   models.Bucket
     .findOne({ where: { bucketId: { $eq: bucketId } } })
@@ -104,15 +106,17 @@ router.get('/:bucketId/objects/:filename*', (req, res, next) => {
         throw new NotFoundError('Bucket not found');
       }
 
-      let pathnameHash = hashFilename(bucket.bucketId, filename);
+      let pathnameHash = hashFilename(bucket.bucketId, objName);
 
       if (!fs.existsSync(path.join(bucket.path, pathnameHash))) {
         throw new NotFoundError('File not found');
       }
 
+      console.log(objName);
+
       res
-        .contentType(filename)
-        .sendfile(pathnameHash, { root: bucket.path, dotfiles: 'deny' });
+        .type(path.extname(objName))
+        .sendFile(pathnameHash, { root: bucket.path, dotfiles: 'deny' });
     })
     .catch(errorResponse(res));
 });
