@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         "allowNull": false
       },
       "identitySignature": {
-        "type": DataTypes.CHAR(60),
+        "type": DataTypes.CHAR(64),
         "allowNull": false
       },
       "method": {
