@@ -5,7 +5,7 @@ const server = require('./server');
 
 chai.use(chaiHttp);
 const API_PREFIX = '/v1';
-const KEY_TOKEN = 'ejAhvOzPP0OL.UbXRkwxDFNCvGRoXOrgOWDJKMv8imJi5CYci78mZJhghAWG9N7ZtWPyWIj1O';
+const ACCESS_KEY = require('./getToken').accessKey;
 
 describe('Tokens', () => {
   describe('GET /tokens', () => {
@@ -29,7 +29,7 @@ describe('Tokens', () => {
       it('should create a one-time token', (done) => {
         chai.request(server)
           .post(API_PREFIX + '/tokens')
-          .set('authorization', KEY_TOKEN)
+          .set('authorization', ACCESS_KEY)
           .send({ userAgent: 'UserAgent', method: 'PUT', ipAddress: '::1' })
           .end((err, res) => {
             res.should.have.status(200);
