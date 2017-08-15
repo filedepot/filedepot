@@ -22,7 +22,6 @@
     "body-parser": "^1.17.2",
     "cors": "^2.8.4",
     "debug": "^2.6.8",
-    "del": "^2.2.2",
     "dotenv": "^2.0.0",
     "express": "^4.15.4",
     "helmet": "^3.8.1",
@@ -41,17 +40,14 @@
     "chai-http": "^3.0.0",
     "gulp-jshint": "^2.0.4",
     "jshint": "^2.9.4",
+    "fs-extra": "^4.0.1",
     "mocha": "^3.5.0",
     "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-filter": "^4.0.0",
-    "gulp-flatten": "^0.3.1",
+    "del": "^2.2.2",
     "gulp-if": "^2.0.1",
     "gulp-ignore": "^2.0.1",
     "gulp-load-plugins": "^1.5.0",
     "gulp-nodemon": "^2.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.5.4",
     "gulp-util": "^3.0.7"
   }
 }
