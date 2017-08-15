@@ -47,10 +47,7 @@ router.put('/:bucketId/objects/:filename*', require('../middlewares/tokenAuth'),
       }
 
       let pathnameHash = hashFilename(bucket.bucketId, filename);
-
-      let originalExt = path.extname(req.file.originalname);
-      let finalFilename = pathnameHash + originalExt;
-      let finalPathname = path.join(bucket.path, finalFilename);
+      let finalPathname = path.join(bucket.path, pathnameHash);
 
       res
         .json({
