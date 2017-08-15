@@ -9,6 +9,7 @@ const bcrypt = require('bcryptjs');
 const errorResponse = require('../libraries/error-res');
 const NotFoundErrror = require('../libraries/notFoundError');
 const hashFilename = require('../libraries/hashFilename');
+const sha256 = require('../libraries/sha256');
 
 module.exports = router;
 
@@ -16,7 +17,7 @@ router.post('/', require('../middlewares/keyAuth'), (req, res, next) => {
   let clientUserAgent = req.body.userAgent;
   let clientIpAddress = req.body.ipAddress;
   let requestMethod = req.body.method;
-  let requestFilename = hashFilename(req.key.BucketBucketId, req.body.filename);
+  let requestFilename = hashFilename(req.key.BucketBucketId, req.body.filename || '');
 
   var state = {};
 
@@ -38,9 +39,8 @@ router.post('/', require('../middlewares/keyAuth'), (req, res, next) => {
       );
   };
 
-  let content = clientUserAgent + '&&' + clientIpAddress;
-  let salt = bcrypt.genSaltSync(10);
-  let hash = bcrypt.hashSync(content, salt);
+  let content = process.env.API_AUTH_SECRET + '&&' + clientUserAgent + '&&' + clientIpAddress;
+  let hash = sha256(content);
   state.hash = hash;
   stringIdGenerator('Token', 'tokenId', createTokenPromise)
     .then((token) => {
