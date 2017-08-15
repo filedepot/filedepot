@@ -77,13 +77,13 @@ router.delete('/:bucketId/objects/:filename*', require('../middlewares/tokenAuth
     return errorResponse(res)(new Error('File operation invalid'));
   }
 
-  let pathnameHash = hashFilename(bucket.bucketId, filename);
-
   req.key.getBucket()
     .then((bucket) => {
       if (!bucket || bucket.bucketId !== bucketId) {
         throw new NotFoundError('Bucket not found');
       }
+
+      let pathnameHash = hashFilename(bucket.bucketId, filename);
 
       res
         .json({
@@ -100,14 +100,14 @@ router.get('/:bucketId/objects/:filename*', (req, res, next) => {
   let bucketId = req.params.bucketId;
   let filename = req.params.filename.toLowerCase();
 
-  let pathnameHash = hashFilename(bucket.bucketId, filename);
-
   models.Bucket
     .findOne({ where: { bucketId: { $eq: bucketId } } })
     .then((bucket) => {
       if (!bucket) {
         throw new NotFoundError('Bucket not found');
       }
+
+      let pathnameHash = hashFilename(bucket.bucketId, filename);
 
       if (!fs.existsSync(path.join(bucket.path, pathnameHash))) {
         throw new NotFoundError('File not found');
