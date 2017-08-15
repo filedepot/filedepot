@@ -2,12 +2,17 @@
 
 FileDepot is an open-sourced and self-managed file storage API service.
 
-An API server is needed to create tokens for users on the clients to interact directly with the storage server.
+Goals:
+
+  - To provide an easy to set up self-managed service for managing file uploads over the internet.
+  - To reduce load on web server by directly performing file from client's web browser to FileDepot's server.
+  - To provide a simple RESTful API that uses concepts similar to S3.
 
 Basic operations include:
 
   - Creation of one-time tokens for protected access to server storage directly from the browser
   - Upload / delete files on the server with tokens
+  - Retrieving uploaded files via HTTP(S)
 
 ## Coming Soon
 
@@ -17,12 +22,22 @@ Basic operations include:
 
 ## Use Cases
 
+### Managing Upload Trust via One-Time Access Tokens
+
 ![Architecture](http://i.imgur.com/lFbbBOp.gif)
 
 When Bob wants to upload a PDF document to your website, Bob opens your website's file uploader. (1) Before the file uploader page was served to Bob,
 your web server uses its access key to request FileDepot to create an one-time-use access token. (2) The token is then given to Bob's web browser
 when the file uploader page is served. (3) When Bob chooses the PDF file and clicks on the "Upload" button, the file - along with the access token - is sent from
 Bob's computer directly to FileDepot. If the access token checks out fine, the file is placed in the Bucket's path on the server's file system.
+
+### Serving Files
+
+In most use cases, objects are retrievable through FileDepot's `GET /buckets/:bucketId/objects/:objectName` API. However throughput on file uploading and authentication can be improved when object retrieval is delegated to a secondary static web server as shown in the example below.
+
+![Architecture 2](http://i.imgur.com/ijEA8dy.gif)
+
+Using a secondary web server may also provide greater controls over caching parameters. You may even decide to serve the files through a CDN.
 
 ## Requirements
 
