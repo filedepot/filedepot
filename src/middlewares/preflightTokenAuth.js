@@ -31,8 +31,9 @@ module.exports = (req, res, next) => {
       if (!token) {
         throw new Error('Invalid token');
       }
-      let content = req.headers['user-agent'] + '&&' + req.ip;
-      if (!bcrypt.compareSync(content, token.identitySignature)) {
+
+      let content = process.env.API_AUTH_SECRET + '&&' + req.headers['user-agent'] + '&&' + req.ip;
+      if (sha256(content) !== token.identitySignature) {
         throw new Error('Signature is mismatched');
       }
 
