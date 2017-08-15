@@ -17,11 +17,12 @@ Basic operations include:
 
 ## Use Cases
 
-When Bob wants to upload a PDF document to your website, Bob opens your website's file uploader. Before the file uploader page was served to Bob,
-your web server uses the access key to talk to a FileDepot instance to create an one-time-use access token. The token is then given to Bob's web browser
-when the file uploader page is served. When Bob chooses the PDF file and clicks on the "Upload" button, the file - along with the access token - is sent from
-Bob's computer directly to FileDepot. FileDepot will check to ensure that the token was created to put a file in the corresponding bucket managed by FileDepot. If
-the access token checks out fine, the file is placed in the Bucket's path on the server's file system and the file name is returned to the browser for further processing.
+![Architecture](http://i.imgur.com/lFbbBOp.gif)
+
+When Bob wants to upload a PDF document to your website, Bob opens your website's file uploader. (1) Before the file uploader page was served to Bob,
+your web server uses its access key to request FileDepot to create an one-time-use access token. (2) The token is then given to Bob's web browser
+when the file uploader page is served. (3) When Bob chooses the PDF file and clicks on the "Upload" button, the file - along with the access token - is sent from
+Bob's computer directly to FileDepot. If the access token checks out fine, the file is placed in the Bucket's path on the server's file system.
 
 ## Requirements
 
