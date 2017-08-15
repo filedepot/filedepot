@@ -74,9 +74,7 @@ Response (JSON):
 
 Method/URI: `GET /buckets/:bucketId/objects/:objectName`
 
-Headers:
-
-- `Authorization`: The authorised one-time Access Token must be supplied in this field. Once used, the access token is invalidated.
+Note: Get request does not require authorization.
 
 Parameters (URL):
 
@@ -84,6 +82,24 @@ Parameters (URL):
 - `objectName` (string): The path of the object in the bucket. e.g. `path/to/file.jpg`
 
 Response: The file is returned. The Content-Type header depends on the type of file requested.
+
+### Deleting an Object from a Bucket
+
+Method/URI: `DELETE /buckets/:bucketId/objects/:objectName`
+
+Headers:
+
+- `Authorization`: The authorized one-time Access Token must be supplied in this field. Once used, the access token is invalidated. The token must be granted with the "DELETE" method otherwise the request would be rejected.
+
+Parameters (URL):
+
+- `bucketId` (string): The ID of the bucket that the object resides in. Note that the access token granted must have access to the bucket.
+- `objectName` (string): The path of the object in the bucket. e.g. `path/to/file.jpg`
+
+Response (JSON):
+
+- `status`: Can be either "ok" or "error".
+- `msg`: If an error occurred, this field contains more information about the error.
 
 ## License
 
