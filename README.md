@@ -105,7 +105,7 @@ Response (JSON):
 
 Method/URI: `PUT /buckets/:bucketId/objects/:objectName`
 
-Note: Method only supports uploading of one single file.
+Note: Method only supports uploading of one single file. If file already exists on file system, the existing file is removed and replaced with the newly uploaded file.
 
 Headers:
 
