@@ -4,6 +4,10 @@ const bcrypt = Promise.promisifyAll(require('bcryptjs'));
 const models = require('../models');
 const authFailed = require('../libraries/auth-failed-res');
 
+/**
+  This middleware checks for authorization by access token without deleting the token
+  for preflight requests by browsers.
+ */
 module.exports = (req, res, next) => {
   var token = req.body.token || req.query.token || req.headers.authorization;
   if (!token) {
