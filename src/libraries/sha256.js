@@ -8,6 +8,6 @@ let sha256 = (content, encoding) => {
   hashAlgo.update(content);
   let hashString = hashAlgo.digest(encoding);
   return hashString;
-}
+};
 
 module.exports = sha256;
