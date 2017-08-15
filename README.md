@@ -55,12 +55,12 @@ Method/URI: `POST /tokens`
 
 Headers:
 
-- `Authorization`: The access key ID and access key secret must be supplied in this field by concatenating both the key ID and secret with a full stop. (e.g. If access key ID is 'ABC' and secret is '123', then the field should be set to 'ABC.123')
+- `Authorization`: The access key ID and access key secret must be supplied in this field by concatenating both the key ID and secret with a full stop. (e.g. If access key ID is 'ABC' and secret is '123', then the field should be set to 'ABC.123') Note that each access key is granted access to one single bucket.
 
 Parameters (Body):
 
-- `userAgent`: The client's user agent property
-- `ipAddress`: The client's IP address
+- `userAgent` (string): The client's user agent property
+- `ipAddress` (string): The client's IP address (can be either IPv4 or IPv6)
 - `method`: Comma-separated methods that the client is able to access using this token. (e.g. `PUT` or `PUT,DELETE`)
 - `filename`: The filename that the token can access. If this is meant for a file upload, this field may be left empty.
 
@@ -70,6 +70,21 @@ Response (JSON):
 - `result`: If successful, a JsonWebToken access token is returned in this field.
 - `msg`: If an error occurred, this field contains more information about the error.
 
+### Retrieving an Object from a Bucket
+
+Method/URI: `GET /buckets/:bucketId/objects/:objectName`
+
+Headers:
+
+- `Authorization`: The authorised one-time Access Token must be supplied in this field. Once used, the access token is invalidated.
+
+Parameters (URL):
+
+- `bucketId` (string): The ID of the bucket that the object resides in. Note that the access token granted must have access to the bucket.
+- `objectName` (string): The path of the object in the bucket. e.g. `path/to/file.jpg`
+
+Response: The file is returned. The Content-Type header depends on the type of file requested.
+
 ## License
 
-The project is open-sourced under MIT License.
+The project is open-sourced under MIT License. Media content are licensed under Creative Commons Attribution-NonCommercial 4.0 International License.
