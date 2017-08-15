@@ -112,8 +112,6 @@ objectRoute.get((req, res, next) => {
         throw new NotFoundError('File not found');
       }
 
-      console.log(objName);
-
       res
         .type(path.extname(objName))
         .sendFile(pathnameHash, { root: bucket.path, dotfiles: 'deny' });

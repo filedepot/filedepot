@@ -9,6 +9,17 @@ const API_PREFIX = '/v1';
 const getToken = require('./getToken').getToken;
 const ACCESS_KEY = require('./getToken').accessKey;
 
+const binaryParser = (res, cb) => {
+  res.setEncoding("binary");
+  res.data = "";
+  res.on("data", function (chunk) {
+    res.data += chunk;
+  });
+  res.on("end", function () {
+    cb(null, new Buffer(res.data, "binary"));
+  });
+};
+
 describe('Objects', () => {
   describe('PUT /buckets/:id/objects/:objName', () => {
     describe('using invalid credentials', () => {
@@ -64,6 +75,25 @@ describe('Objects', () => {
             resData.status.should.be.equals('error');
             resData.should.have.property('msg');
             done();
+          });
+      });
+    });
+
+    describe('using previously uploaded object name', () => {
+      it('should not be available', (done) => {
+        chai.request(server)
+          .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
+          .buffer()
+          .parse(binaryParser)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.headers.should.have.property('content-type');
+            res.headers['content-type'].should.be.equals('application/javascript');
+            fs.readFile('test/tokens.js')
+              .then((content) => {
+                res.body.equals(content).should.be.equals(true);
+                done();
+              });
           });
       });
     });
