@@ -4,4 +4,5 @@ node_js:
   - "6"
   - "6.1"
 env:
-  - "NODE_ENV=development  DB_NAME=filedepot DB_USER=root DB_PASS=password DB_CONFIG={\"storage\": \"test/test.tmp.sqlite\", \"dialect\": \"sqlite\"} API_AUTH_SECRET=somerandomstring DB_SYNC=0 TOKEN_LIFE_MINUTES=2"
+  - "NODE_ENV=development API_AUTH_SECRET=somerandomstring DB_SYNC=0 TOKEN_LIFE_MINUTES=2"
+  - "NODE_ENV=production API_AUTH_SECRET=somerandomstring DB_SYNC=0 TOKEN_LIFE_MINUTES=2"
