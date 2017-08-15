@@ -6,7 +6,8 @@ module.exports = (res) => {
       return res
         .status(404)
         .json({
-          "status": "error"
+          "status": "error",
+          "msg": err.message
         });
     }
 
