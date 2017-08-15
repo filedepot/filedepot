@@ -34,9 +34,8 @@ let preflightCorsDelegate = (req, callback) => {
   callback(null, corsOptions);
 };
 
-
-
 router.options('/:bucketId/objects', require('../middlewares/preflightTokenAuth'), cors(preflightCorsDelegate));
+
 router.put('/:bucketId/objects/:filename', require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
   let reqBucketId = req.params.bucketId;
   let filename = req.params.filename;

@@ -27,7 +27,7 @@ router.post('/', require('../middlewares/keyAuth'), (req, res, next) => {
           tokenId: id,
           KeyKeyId: req.key.keyId,
           identitySignature: state.hash,
-          dateExpiry: moment().add(2, 'minutes'),
+          dateExpiry: moment().add(+process.env.TOKEN_LIFE_MINUTES, 'minutes'),
           method: requestMethod,
           filename: requestFilename
         },
@@ -50,7 +50,7 @@ router.post('/', require('../middlewares/keyAuth'), (req, res, next) => {
         },
         process.env.API_AUTH_SECRET,
         {
-          "expiresIn": '2m'
+          "expiresIn": '' + process.env.TOKEN_LIFE_MINUTES + 'm'
         }
       );
       return res
