@@ -3,6 +3,7 @@ const jwt = Promise.promisifyAll(require('jsonwebtoken'));
 const bcrypt = Promise.promisifyAll(require('bcryptjs'));
 const models = require('../models');
 const authFailed = require('../libraries/auth-failed-res');
+const sha256 = require('../libraries/sha256');
 
 /**
   This middleware checks for authorization by access token and deletes the token
@@ -34,8 +35,8 @@ module.exports = (req, res, next) => {
           throw new Error('Invalid token');
         }
 
-        let content = req.headers['user-agent'] + '&&' + req.ip;
-        if (!bcrypt.compareSync(content, token.identitySignature)) {
+        let content = process.env.API_AUTH_SECRET + '&&' + req.headers['user-agent'] + '&&' + req.ip;
+        if (sha256(content) !== token.identitySignature) {
           throw new Error('Signature is mismatched');
         }
 
