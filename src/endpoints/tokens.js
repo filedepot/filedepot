@@ -5,9 +5,7 @@ const models = require('../models');
 const jwt = Promise.promisifyAll(require('jsonwebtoken'));
 const stringIdGenerator = require("../libraries/stringIdGenerator");
 const moment = require("moment");
-const bcrypt = require('bcryptjs');
 const errorResponse = require('../libraries/error-res');
-const NotFoundErrror = require('../libraries/notFoundError');
 const hashFilename = require('../libraries/hashFilename');
 const sha256 = require('../libraries/sha256');
 
