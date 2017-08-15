@@ -8,7 +8,7 @@ env:
   - DB_NAME=filedepot
   - DB_USER=root
   - DB_PASS=password
-  - "DB_CONFIG={"host": "localhost", "dialect": "mysql", "port": 3306}"
+  - "DB_CONFIG={\"storage\": \"test/test.tmp.sqlite\", \"dialect\": \"sqlite\"}"
   - API_AUTH_SECRET=somerandomstring
   - DB_SYNC=0
   - TOKEN_LIFE_MINUTES=2
