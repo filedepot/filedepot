@@ -1,6 +1,6 @@
-# FileDepot
+![FileDepot](http://i.imgur.com/lYOpp7J.png)
 
-FileDepot is an open-sourced and self-managed file storage API service.
+FileDepot is a self-managed object storage API service.
 
 Goals:
 
@@ -8,7 +8,7 @@ Goals:
   - To reduce load on web server by directly performing file from client's web browser to FileDepot's server.
   - To provide a simple RESTful API that uses concepts similar to S3.
 
-Basic operations include:
+Operations include:
 
   - Creation of one-time tokens for protected access to server storage directly from the browser
   - Upload / delete files on the server with tokens
