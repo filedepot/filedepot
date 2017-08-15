@@ -59,9 +59,9 @@ Headers:
 
 Parameters (Body):
 
-- `userAgent` (string): The client's user agent property
-- `ipAddress` (string): The client's IP address (can be either IPv4 or IPv6)
-- `method`: Comma-separated methods that the client is able to access using this token. (e.g. `PUT` or `PUT,DELETE`)
+- `userAgent` (string): The client's user agent property who will make the actual request.
+- `ipAddress` (string): The client's IP address (can be either IPv4 or IPv6) that the actual request will come from.
+- `method`: Comma-separated methods that the client is able to access using this token. (e.g. `PUT` or `PUT,DELETE` with no spaces)
 - `filename`: The filename that the token can access. If this is meant for a file upload, this field may be left empty.
 
 Response (JSON):
@@ -95,6 +95,30 @@ Parameters (URL):
 
 - `bucketId` (string): The ID of the bucket that the object resides in. Note that the access token granted must have access to the bucket.
 - `objectName` (string): The path of the object in the bucket. e.g. `path/to/file.jpg`
+
+Response (JSON):
+
+- `status`: Can be either "ok" or "error".
+- `msg`: If an error occurred, this field contains more information about the error.
+
+### Adding or Updating an Object from a Bucket
+
+Method/URI: `PUT /buckets/:bucketId/objects/:objectName`
+
+Note: Method only supports uploading of one single file.
+
+Headers:
+
+- `Authorization`: The authorized one-time Access Token must be supplied in this field. Once used, the access token is invalidated. The token must be granted with the "PUT" method otherwise the request would be rejected.
+
+Parameters (URL):
+
+- `bucketId` (string): The ID of the bucket that the object resides in. Note that the access token granted must have access to the bucket.
+- `objectName` (string): The path of the object in the bucket. e.g. `path/to/file.jpg`
+
+Parameters (Body):
+
+- `file` (multipart/form-data): The contents of the file
 
 Response (JSON):
 
