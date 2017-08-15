@@ -3,6 +3,8 @@ const fs = require('fs-extra');
 const path = require('path');
 const models = require('../src/models');
 
+process.env.TEST_BUCKET_ID = 'XvFgDxAD';
+
 before((done) => {
   console.log('Setting up...');
   fs.copy('test/test.sqlite', 'test/test.tmp.sqlite')
@@ -18,7 +20,7 @@ before((done) => {
           },
           {
             where: {
-              bucketId: 'XvFgDxAD'
+              bucketId: process.env.TEST_BUCKET_ID
             }
           }
         )
@@ -34,7 +36,7 @@ after((done) => {
   fs.unlink('test/test.tmp.sqlite')
     .then(() => {
       return models.Bucket
-        .findOne({ where: { bucketId: 'XvFgDxAD' }});
+        .findOne({ where: { bucketId: process.env.TEST_BUCKET_ID }});
     })
     .then((bucket) => {
       return fs.remove(bucket.path);
