@@ -77,15 +77,18 @@ objectRoute.delete(require('../middlewares/keyAuth'), cors(preflightCorsDelegate
         throw new NotFoundError('Bucket not found');
       }
 
-      let pathnameHash = hashFilename(bucket.bucketId, objName);
-
       res
         .json({
           "status": "ok"
         });
 
+      let pathnameHash = hashFilename(bucket.bucketId, objName);
       let pathnameActual = path.join(bucket.path, pathnameHash);
-      return fs.unlink(pathnameActual);
+      try {
+        fs.unlinkSync(pathnameActual);
+      } catch (e) {}
+
+      return null;
     })
     .catch(errorResponse(res));
 });
