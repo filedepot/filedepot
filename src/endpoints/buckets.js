@@ -67,7 +67,7 @@ objectRoute.put(require('../middlewares/tokenAuth'), cors(preflightCorsDelegate)
     .catch(errorResponse(res));
 });
 
-objectRoute.delete(require('../middlewares/tokenAuth'), cors(preflightCorsDelegate), upload.single('file'), (req, res, next) => {
+objectRoute.delete(require('../middlewares/keyAuth'), cors(preflightCorsDelegate), (req, res, next) => {
   let bucketId = req.params.bucketId;
   let objName = req.params.objName.toLowerCase();
 
