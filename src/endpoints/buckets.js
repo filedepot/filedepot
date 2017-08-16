@@ -71,11 +71,6 @@ objectRoute.delete(require('../middlewares/keyAuth'), cors(preflightCorsDelegate
   let bucketId = req.params.bucketId;
   let objName = req.params.objName.toLowerCase();
 
-  // ensure permissions is given for the correct file
-  if (req.token.objName.toLowerCase() !== objName) {
-    return errorResponse(res)(new Error('File operation invalid'));
-  }
-
   req.key.getBucket()
     .then((bucket) => {
       if (!bucket || bucket.bucketId !== bucketId) {
