@@ -21,7 +21,7 @@ function getToken(method, object) {
         resolve(resData.result);
       });
   });
-};
+}
 
 module.exports = {
   getToken: getToken,

@@ -23,20 +23,20 @@ before((done) => {
               bucketId: process.env.TEST_BUCKET_ID
             }
           }
-        )
+        );
     })
     .then(() => {
       console.log('Setup done.');
       done();
     });
-})
+});
 
 after((done) => {
   console.log('Tearing down...');
   fs.unlink('test/test.tmp.sqlite')
     .then(() => {
       return models.Bucket
-        .findOne({ where: { bucketId: process.env.TEST_BUCKET_ID }});
+        .findOne({ where: { bucketId: process.env.TEST_BUCKET_ID } });
     })
     .then((bucket) => {
       return fs.remove(bucket.path);
@@ -44,5 +44,5 @@ after((done) => {
     .then(() => {
       console.log('Teardown done.');
       done();
-    })
-})
+    });
+});
