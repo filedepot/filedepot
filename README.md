@@ -115,7 +115,7 @@ Parameters (URL):
 
 Response (JSON):
 
-- `status`: Can be either "ok" or "error".
+- `status`: Can be either "ok" or "error". The operation does not check if the file exists and hence would return "ok" even if file does not exist.
 - `msg`: If an error occurred, this field contains more information about the error.
 
 ### Adding or Updating an Object from a Bucket
