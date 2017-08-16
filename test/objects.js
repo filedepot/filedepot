@@ -99,4 +99,39 @@ describe('Objects', () => {
     });
   });
 
+  describe('DELETE /buckets/:id/objects/:objName', () => {
+    describe('using non-existent object name', () => {
+      it('should simply return ok regardless', (done) => {
+        chai.request(server)
+          .delete(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/what-file.js')
+          .set('authorization', ACCESS_KEY)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.text.should.be.a('string');
+            let resData = JSON.parse(res.text);
+            resData.should.have.property('status');
+            resData.status.should.be.equals('ok');
+            done();
+          });
+      });
+    });
+
+    describe('using invalid access key', () => {
+      it('should not be available', (done) => {
+        chai.request(server)
+          .delete(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
+          .set('authorization', 'none')
+          .end((err, res) => {
+            res.should.have.status(403);
+            res.text.should.be.a('string');
+            let resData = JSON.parse(res.text);
+            resData.should.have.property('status');
+            resData.status.should.be.equals('error');
+            resData.should.have.property('msg');
+            done();
+          });
+      });
+    });
+  });
+
 });
