@@ -37,6 +37,10 @@ To run tests on `NODE_ENV=development`:
 
 Running tests will also run the lint process and show all lint errors.
 
+### In Production
+
+When used in production, ensure that a process manager such as [`pm2`](https://github.com/Unitech/pm2) is used to monitor and restart the server NodeJS process. The server should also be serving public / wild web requests behind a reverse proxy, preferably communicating with others over HTTPS.
+
 ## Use Cases
 
 ### Managing Upload Trust via One-Time Access Tokens
@@ -65,6 +69,13 @@ Using a secondary web server may also provide greater controls over caching para
 ## API References
 
 All API endpoints are prefixed with `/v1` to impose versioning on the API.
+
+### Authorizations
+
+There are two kinds of authorizations: Access Key and Access Token.
+
+ - `Access Key`: They are used by applications to grant clients access tokens or perform direct operations on the file system.
+ - `Access Token`: They are created using an access key to be issued to the clients (e.g. web browser) to submit a request directly to the FileDepot server, such as uploading files. Access Tokens are one-time use only.
 
 ### Creating an Access Token
 
@@ -106,7 +117,7 @@ Method/URI: `DELETE /buckets/:bucketId/objects/:objectName`
 
 Headers:
 
-- `Authorization`: The authorized one-time Access Token must be supplied in this field. Once used, the access token is invalidated. The token must be granted with the "DELETE" method otherwise the request would be rejected.
+- `Authorization`: The access key ID and access key secret must be supplied in this field by concatenating both the key ID and secret with a full stop. (e.g. If access key ID is 'ABC' and secret is '123', then the field should be set to 'ABC.123') Note that each access key is granted access to one single bucket.
 
 Parameters (URL):
 
