@@ -80,7 +80,7 @@ describe('Objects', () => {
     });
 
     describe('using previously uploaded object name', () => {
-      it('should not be available', (done) => {
+      it('should be available', (done) => {
         chai.request(server)
           .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .buffer()
@@ -123,6 +123,36 @@ describe('Objects', () => {
           .set('authorization', 'none')
           .end((err, res) => {
             res.should.have.status(403);
+            res.text.should.be.a('string');
+            let resData = JSON.parse(res.text);
+            resData.should.have.property('status');
+            resData.status.should.be.equals('error');
+            resData.should.have.property('msg');
+            done();
+          });
+      });
+    });
+
+    describe('using valid access key', () => {
+      it('should process the request', (done) => {
+        chai.request(server)
+          .delete(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
+          .set('authorization', ACCESS_KEY)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.text.should.be.a('string');
+            let resData = JSON.parse(res.text);
+            resData.should.have.property('status');
+            resData.status.should.be.equals('ok');
+            done();
+          });
+      });
+
+      it('file should no longer be available', (done) => {
+        chai.request(server)
+          .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
+          .end((err, res) => {
+            res.should.have.status(404);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
             resData.should.have.property('status');
