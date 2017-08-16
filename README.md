@@ -15,12 +15,27 @@ Operations include:
   - Creation of one-time tokens for protected access to server storage directly from the browser
   - Upload / delete files on the server with tokens
   - Retrieving uploaded files via HTTP(S)
+  - Ensures token are issued for and used by the same client (through client fingerprinting)
 
 ## Coming Soon
 
 - CLI Tool to manage buckets and access keys to buckets
 - HEAD method to provide information about a given file in a bucket
 - Large file (in parts) support
+
+## Usage
+
+To start the FileDepot server:
+
+    npm start
+
+By default the server runs listening to port 3000. If you wish to use a different port, set environment variable `PORT` to the port number you want FileDepot to listen to.
+
+To run tests on `NODE_ENV=development`:
+
+    npm test
+
+Running tests will also run the lint process and show all lint errors.
 
 ## Use Cases
 
