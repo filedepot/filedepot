@@ -55,6 +55,7 @@ objectRoute.put(require('../middlewares/tokenAuth'), cors(preflightCorsDelegate)
           "status": "ok"
         });
 
+      // eslint-disable-next-line no-sync
       if (fs.existsSync(finalPathname)) {
         return fs.unlink(finalPathname)
           .then(() => {
@@ -84,6 +85,7 @@ objectRoute.delete(require('../middlewares/keyAuth'), cors(preflightCorsDelegate
       let pathnameHash = hashFilename(bucket.bucketId, objName);
       let pathnameActual = path.join(bucket.path, pathnameHash);
       try {
+        // eslint-disable-next-line no-sync
         fs.unlinkSync(pathnameActual);
       } catch (err) {
         noop();
@@ -107,6 +109,7 @@ objectRoute.get((req, res, next) => {
 
       let pathnameHash = hashFilename(bucket.bucketId, objName);
 
+      // eslint-disable-next-line no-sync
       if (!fs.existsSync(path.join(bucket.path, pathnameHash))) {
         throw new NotFoundError('File not found');
       }
