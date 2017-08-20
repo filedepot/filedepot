@@ -1,11 +1,10 @@
 const Promise = require('bluebird');
 const jwt = Promise.promisifyAll(require('jsonwebtoken'));
-const bcrypt = Promise.promisifyAll(require('bcryptjs'));
-const models = require('../models');
+const models = require('filedepot-models');
 const authFailed = require('../libraries/auth-failed-res');
 const sha256 = require('../libraries/sha256');
 
-/**
+/*
   This middleware checks for authorization by access token without deleting the token
   for preflight requests by browsers.
  */
@@ -22,37 +21,40 @@ module.exports = (req, res, next) => {
           where: {
             tokenId: decoded.tokenId
           },
-          include: [{
-            model: models.Key
-          }],
+          include: [
+            {
+              model: models.Key
+            }
+          ],
           logging: false
         });
     })
-    .then((token) => {
-      if (!token) {
+    .then((accessToken) => {
+      if (!accessToken) {
         throw new Error('Invalid token');
       }
 
       let content = process.env.API_AUTH_SECRET + '&&' + req.headers['user-agent'] + '&&' + req.ip;
-      if (sha256(content) !== token.identitySignature) {
+      if (sha256(content) !== accessToken.identitySignature) {
         throw new Error('Signature is mismatched');
       }
 
-      if ((new Date()) - token.dateExpiry > 0) {
+      if (new Date() - accessToken.dateExpiry > 0) {
         throw new Error('Token has expired');
       }
 
       let reqMethod = req.headers['Access-Control-Request-Method'].toLowerCase();
-      if (token.method.toLowerCase().split(/,/g).indexOf(reqMethod) === -1) {
+      let methodsArray = accessToken.method.toLowerCase().split(/,/g);
+      if (methodsArray.indexOf(reqMethod) === -1) {
         throw new Error('Method not allowed');
       }
 
-      req.token = token;
-      req.key = token.key;
+      req.token = accessToken;
+      req.key = accessToken.key;
       next();
       return null;
     })
-    .catch((err) => {
+    .catch(() => {
       return authFailed(res);
     });
 };

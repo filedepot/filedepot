@@ -1,10 +1,8 @@
-const Promise = require('bluebird');
-const jwt = Promise.promisifyAll(require('jsonwebtoken'));
-const bcrypt = Promise.promisifyAll(require('bcryptjs'));
-const models = require('../models');
+const bcrypt = require('bcryptjs');
+const models = require('filedepot-models');
 const authFailed = require('../libraries/auth-failed-res');
 
-/**
+/*
   This middleware checks for authorization by access key
   before forwarding the request to the route.
  */
@@ -22,7 +20,9 @@ module.exports = (req, res, next) => {
   let keyId = tokenParts[0];
   let secret = tokenParts[1];
 
-  models.Key
+  let state = {};
+
+  return models.Key
     .findOne({
       where: {
         keyId: keyId
@@ -33,15 +33,19 @@ module.exports = (req, res, next) => {
       if (!key) {
         throw new Error('Key not found');
       }
-      if (!bcrypt.compareSync(secret, key.secretHash)) {
-        throw new Error('Secret is wrong');
-      }
 
-      req.key = key;
+      state.key = key;
+      return bcrypt.compare(secret, key.secretHash);
+    })
+    .then((result) => {
+      if (!result) {
+        throw new Error('Invalid secret');
+      }
+      req.key = state.key;
       next();
       return null;
     })
-    .catch((err) => {
+    .catch(() => {
       return authFailed(res);
     });
 };
