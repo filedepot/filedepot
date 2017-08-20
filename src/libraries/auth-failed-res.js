@@ -1,7 +1,8 @@
-var NotFoundError = require('./notFoundError');
-
 module.exports = (res) => {
-  res
+  return res
     .status(403)
-    .json({ "status": "error", "msg": "Authentication Failed" });
+    .json({
+      "status": "error",
+      "msg": "Authentication Failed"
+    });
 };

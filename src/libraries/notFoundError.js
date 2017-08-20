@@ -1,6 +1,5 @@
-
-module.exports = class NotFoundError extends Error {
-  constructor (message, status) {
+class NotFoundError extends Error {
+  constructor (message) {
     // Calling parent constructor of base Error class.
     super(message);
 
@@ -15,4 +14,6 @@ module.exports = class NotFoundError extends Error {
     // `500` is the default value if not specified.
     this.httpStatus = 404;
   }
-};
+}
+
+module.exports = NotFoundError;

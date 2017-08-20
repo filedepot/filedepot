@@ -2,9 +2,10 @@ const randomstring = require("randomstring");
 const Promise = require('bluebird');
 const models = require('../models');
 
-module.exports = (model, field, createPromise, logging) => {
+module.exports = function (model, field, createPromise) {
+  let dbModel = model;
   if (typeof model === 'string') {
-    model = models[model];
+    dbModel = models[model];
   }
 
   let idDuplicateError = new Error('Identifier in use.');
@@ -15,13 +16,11 @@ module.exports = (model, field, createPromise, logging) => {
     whereConditions[field] = { $eq: id };
 
     var options = {};
-    if (!logging) {
-      options.logging = false;
-    }
+    options.logging = false;
     options.where = whereConditions;
     options.transaction = transaction;
 
-    return model.findOne(options)
+    return dbModel.findOne(options)
       .then((result) => {
         if (result) {
           throw idDuplicateError;
@@ -34,14 +33,12 @@ module.exports = (model, field, createPromise, logging) => {
     let identifier = randomstring.generate(length);
 
     var options = {};
-    if (!logging) {
-      options.logging = false;
-    }
+    options.logging = false;
     return models.sequelize
-      .transaction(options, (t) => {
-        return checkPromise(identifier, t)
+      .transaction(options, (transaction) => {
+        return checkPromise(identifier, transaction)
           .then(() => {
-            return createPromise(identifier, t);
+            return createPromise(identifier, transaction);
           })
           .catch((err) => {
             if (err !== idDuplicateError) {
