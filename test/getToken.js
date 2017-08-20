@@ -12,13 +12,15 @@ function getToken(method, object) {
     chai.request(server)
       .post(API_PREFIX + '/tokens')
       .set('authorization', ACCESS_KEY)
-      .send({ userAgent: 'UserAgent', method: method, ipAddress: '::ffff:127.0.0.1', filename: object })
-      .end((err, res) => {
-        if (err) {
-          return reject(new Error(err));
-        }
+      .send({
+        userAgent: 'UserAgent',
+        method: method,
+        ipAddress: '::ffff:127.0.0.1',
+        filename: object
+      })
+      .then((res) => {
         let resData = JSON.parse(res.text);
-        resolve(resData.result);
+        return resolve(resData.result);
       });
   });
 }

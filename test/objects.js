@@ -12,11 +12,11 @@ const ACCESS_KEY = require('./getToken').accessKey;
 const binaryParser = (res, cb) => {
   res.setEncoding("binary");
   res.data = "";
-  res.on("data", function (chunk) {
+  res.on("data", (chunk) => {
     res.data += chunk;
   });
-  res.on("end", function () {
-    cb(null, new Buffer(res.data, "binary"));
+  res.on("end", () => {
+    cb(null, Buffer.from(res.data, 'binary'));
   });
 };
 
@@ -27,7 +27,7 @@ describe('Objects', () => {
         chai.request(server)
           .put(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .set('authorization', 'ANY')
-          .end((err, res) => {
+          .then((res) => {
             res.should.have.status(403);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -48,7 +48,7 @@ describe('Objects', () => {
               .attach('file', fs.readFileSync('test/tokens.js'), 'tokens.js')
               .set('authorization', token)
               .set('user-agent', 'UserAgent')
-              .end((err, res) => {
+              .then((res) => {
                 res.should.have.status(200);
                 res.text.should.be.a('string');
                 let resData = JSON.parse(res.text);
@@ -67,7 +67,7 @@ describe('Objects', () => {
       it('should not be available', (done) => {
         chai.request(server)
           .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/what-file.js')
-          .end((err, res) => {
+          .then((res) => {
             res.should.have.status(404);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -85,7 +85,7 @@ describe('Objects', () => {
           .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .buffer()
           .parse(binaryParser)
-          .end((err, res) => {
+          .then((res) => {
             res.should.have.status(200);
             res.headers.should.have.property('content-type');
             res.headers['content-type'].should.be.equals('application/javascript');
@@ -105,7 +105,7 @@ describe('Objects', () => {
         chai.request(server)
           .delete(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/what-file.js')
           .set('authorization', ACCESS_KEY)
-          .end((err, res) => {
+          .then((res) => {
             res.should.have.status(200);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -121,7 +121,7 @@ describe('Objects', () => {
         chai.request(server)
           .delete(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .set('authorization', 'none')
-          .end((err, res) => {
+          .then((res) => {
             res.should.have.status(403);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -138,7 +138,7 @@ describe('Objects', () => {
         chai.request(server)
           .delete(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .set('authorization', ACCESS_KEY)
-          .end((err, res) => {
+          .then((res) => {
             res.should.have.status(200);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -151,7 +151,7 @@ describe('Objects', () => {
       it('file should no longer be available', (done) => {
         chai.request(server)
           .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
-          .end((err, res) => {
+          .then((res) => {
             res.should.have.status(404);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);

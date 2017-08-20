@@ -12,7 +12,7 @@ describe('Errors', () => {
       chai.request(server)
         .get(API_PREFIX + '/404')
         .set('Accept', 'application/json')
-        .end((err, res) => {
+        .then((res) => {
           res.should.have.status(404);
           res.text.should.be.a('string');
           let resData = JSON.parse(res.text);
@@ -28,7 +28,7 @@ describe('Errors', () => {
       chai.request(server)
         .get(API_PREFIX + '/404')
         .set('Accept', 'text/html')
-        .end((err, res) => {
+        .then((res) => {
           res.should.have.status(406);
           res.text.should.be.a('string');
           res.text.should.be.equals('Page not found');

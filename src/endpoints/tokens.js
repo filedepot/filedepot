@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Promise = require('bluebird');
-const models = require('../models');
+const models = require('filedepot-models');
 const jwt = Promise.promisifyAll(require('jsonwebtoken'));
 const stringIdGenerator = require("../libraries/stringIdGenerator");
 const moment = require("moment");
@@ -19,19 +19,19 @@ router.post('/', require('../middlewares/keyAuth'), (req, res, next) => {
 
   var state = {};
 
-  let createTokenPromise = (id, t) => {
+  let createTokenPromise = (id, transaction) => {
     return models.Token
       .create(
         {
           tokenId: id,
           KeyKeyId: req.key.keyId,
           identitySignature: state.hash,
-          dateExpiry: moment().add(+process.env.TOKEN_LIFE_MINUTES, 'minutes'),
+          dateExpiry: moment().add(Number(process.env.TOKEN_LIFE_MINUTES), 'minutes'),
           method: requestMethod,
           filename: requestFilename
         },
         {
-          transaction: t,
+          transaction: transaction,
           logging: null
         }
       );
@@ -48,7 +48,7 @@ router.post('/', require('../middlewares/keyAuth'), (req, res, next) => {
         },
         process.env.API_AUTH_SECRET,
         {
-          "expiresIn": '' + process.env.TOKEN_LIFE_MINUTES + 'm'
+          "expiresIn": String(process.env.TOKEN_LIFE_MINUTES) + 'm'
         }
       );
       return res

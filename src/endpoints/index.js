@@ -1,5 +1,3 @@
-const path = require("path");
-
 module.exports = (app) => {
   let API_PREFIX = "/v1";
 
@@ -18,11 +16,12 @@ module.exports = (app) => {
   ];
 
   endpoints.forEach((endpoint) => {
+    // eslint-disable-next-line global-require
     app.use(API_PREFIX + '/' + endpoint, require('./' + endpoint));
   });
 
   app.use((req, res, next) => {
-    if(req.accepts('json')) {
+    if (req.accepts('json')) {
       return res
         .status(404)
         .json({
@@ -31,7 +30,7 @@ module.exports = (app) => {
         });
     }
 
-    res
+    return res
       .status(406)
       .send('Page not found');
   });

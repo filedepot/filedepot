@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const models = require('../models');
+const models = require('filedepot-models');
 const errorResponse = require('../libraries/error-res');
 const NotFoundError = require('../libraries/notFoundError');
 const cors = require('cors');
 const multer = require('multer');
-const Promise = require('bluebird');
-const fs = Promise.promisifyAll(require('fs'));
+const fs = require('fs-extra');
 const path = require('path');
 const hashFilename = require('../libraries/hashFilename');
 
@@ -34,7 +33,7 @@ let preflightCorsDelegate = (req, callback) => {
   callback(null, corsOptions);
 };
 
-let objectRoute = router.route('/:bucketId/objects/:objName(\*)');
+let objectRoute = router.route('/:bucketId/objects/:objName(*)');
 
 objectRoute.options(require('../middlewares/preflightTokenAuth'), cors(preflightCorsDelegate));
 
@@ -86,7 +85,9 @@ objectRoute.delete(require('../middlewares/keyAuth'), cors(preflightCorsDelegate
       let pathnameActual = path.join(bucket.path, pathnameHash);
       try {
         fs.unlinkSync(pathnameActual);
-      } catch (e) {}
+      } catch (err) {
+        noop();
+      }
 
       return null;
     })
@@ -112,7 +113,13 @@ objectRoute.get((req, res, next) => {
 
       res
         .type(path.extname(objName))
-        .sendFile(pathnameHash, { root: bucket.path, dotfiles: 'deny' });
+        .sendFile(
+          pathnameHash,
+          {
+            root: bucket.path,
+            dotfiles: 'deny'
+          }
+        );
     })
     .catch(errorResponse(res));
 });

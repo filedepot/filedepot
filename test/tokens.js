@@ -12,7 +12,7 @@ describe('Tokens', () => {
     it('should not be available', (done) => {
       chai.request(server)
         .get(API_PREFIX + '/tokens')
-        .end((err, res) => {
+        .then((res) => {
           res.should.have.status(404);
           res.text.should.be.a('string');
           let resData = JSON.parse(res.text);
@@ -30,8 +30,12 @@ describe('Tokens', () => {
         chai.request(server)
           .post(API_PREFIX + '/tokens')
           .set('authorization', ACCESS_KEY)
-          .send({ userAgent: 'UserAgent', method: 'PUT', ipAddress: '::1' })
-          .end((err, res) => {
+          .send({
+            userAgent: 'UserAgent',
+            method: 'PUT',
+            ipAddress: '::1'
+          })
+          .then((res) => {
             res.should.have.status(200);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -48,8 +52,12 @@ describe('Tokens', () => {
         chai.request(server)
           .post(API_PREFIX + '/tokens')
           .set('authorization', 'ANY')
-          .send({ userAgent: 'UserAgent', method: 'PUT', ipAddress: '::1' })
-          .end((err, res) => {
+          .send({
+            userAgent: 'UserAgent',
+            method: 'PUT',
+            ipAddress: '::1'
+          })
+          .then((res) => {
             res.should.have.status(403);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
