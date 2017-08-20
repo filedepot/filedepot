@@ -1,6 +1,6 @@
 const randomstring = require("randomstring");
 const Promise = require('bluebird');
-const models = require('../models');
+const models = require('filedepot-models');
 
 module.exports = function (model, field, createPromise) {
   let dbModel = model;
@@ -9,7 +9,7 @@ module.exports = function (model, field, createPromise) {
   }
 
   let idDuplicateError = new Error('Identifier in use.');
-  let length = model.attributes[field].type._length;
+  let length = dbModel.attributes[field].type._length;
 
   let checkPromise = (id, transaction) => {
     let whereConditions = {};
