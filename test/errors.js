@@ -13,6 +13,11 @@ describe('Errors', () => {
         .get(API_PREFIX + '/404')
         .set('Accept', 'application/json')
         .then((res) => {
+          throw new Error();
+          done();
+        })
+        .catch((err) => {
+          let res = err.response;
           res.should.have.status(404);
           res.text.should.be.a('string');
           let resData = JSON.parse(res.text);
@@ -29,6 +34,11 @@ describe('Errors', () => {
         .get(API_PREFIX + '/404')
         .set('Accept', 'text/html')
         .then((res) => {
+          throw new Error();
+          done();
+        })
+        .catch((err) => {
+          let res = err.response;
           res.should.have.status(406);
           res.text.should.be.a('string');
           res.text.should.be.equals('Page not found');

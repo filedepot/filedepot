@@ -13,6 +13,11 @@ describe('Tokens', () => {
       chai.request(server)
         .get(API_PREFIX + '/tokens')
         .then((res) => {
+          throw new Error();
+          done();
+        })
+        .catch((err) => {
+          let res = err.response;
           res.should.have.status(404);
           res.text.should.be.a('string');
           let resData = JSON.parse(res.text);
@@ -43,6 +48,10 @@ describe('Tokens', () => {
             resData.status.should.be.equals('ok');
             resData.should.have.property('result');
             done();
+          })
+          .catch((err) => {
+            console.log(err);
+            throw err;
           });
       });
     });
@@ -58,6 +67,11 @@ describe('Tokens', () => {
             ipAddress: '::1'
           })
           .then((res) => {
+            throw new Error();
+            done();
+          })
+          .catch((err) => {
+            let res = err.response;
             res.should.have.status(403);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);

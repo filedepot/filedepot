@@ -28,6 +28,11 @@ describe('Objects', () => {
           .put(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .set('authorization', 'ANY')
           .then((res) => {
+            throw new Error();
+            done();
+          })
+          .catch((err) => {
+            let res = err.response;
             res.should.have.status(403);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -43,20 +48,25 @@ describe('Objects', () => {
       it('should accept the request and upload the file', (done) => {
         getToken('PUT', 'path/to/file.js')
           .then((token) => {
-            chai.request(server)
+            return chai.request(server)
               .put(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
+              // eslint-disable-next-line no-sync
               .attach('file', fs.readFileSync('test/tokens.js'), 'tokens.js')
               .set('authorization', token)
-              .set('user-agent', 'UserAgent')
-              .then((res) => {
-                res.should.have.status(200);
-                res.text.should.be.a('string');
-                let resData = JSON.parse(res.text);
-                resData.should.have.property('status');
-                resData.status.should.be.equals('ok');
-                resData.should.not.have.property('msg');
-                done();
-              });
+              .set('user-agent', 'UserAgent');
+          })
+          .then((res) => {
+            res.should.have.status(200);
+            res.text.should.be.a('string');
+            let resData = JSON.parse(res.text);
+            resData.should.have.property('status');
+            resData.status.should.be.equals('ok');
+            resData.should.not.have.property('msg');
+            done();
+          })
+          .catch((err) => {
+            console.log(err);
+            throw err;
           });
       });
     });
@@ -68,6 +78,11 @@ describe('Objects', () => {
         chai.request(server)
           .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/what-file.js')
           .then((res) => {
+            throw new Error();
+            done();
+          })
+          .catch((err) => {
+            let res = err.response;
             res.should.have.status(404);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -94,6 +109,10 @@ describe('Objects', () => {
                 res.body.equals(content).should.be.equals(true);
                 done();
               });
+          })
+          .catch((err) => {
+            console.log(err);
+            throw err;
           });
       });
     });
@@ -112,6 +131,10 @@ describe('Objects', () => {
             resData.should.have.property('status');
             resData.status.should.be.equals('ok');
             done();
+          })
+          .catch((err) => {
+            console.log(err);
+            throw err;
           });
       });
     });
@@ -122,6 +145,11 @@ describe('Objects', () => {
           .delete(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .set('authorization', 'none')
           .then((res) => {
+            throw new Error();
+            done();
+          })
+          .catch((err) => {
+            let res = err.response;
             res.should.have.status(403);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -145,6 +173,10 @@ describe('Objects', () => {
             resData.should.have.property('status');
             resData.status.should.be.equals('ok');
             done();
+          })
+          .catch((err) => {
+            console.log(err);
+            throw err;
           });
       });
 
@@ -152,6 +184,11 @@ describe('Objects', () => {
         chai.request(server)
           .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .then((res) => {
+            throw new Error();
+            done();
+          })
+          .catch((err) => {
+            let res = err.response;
             res.should.have.status(404);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
