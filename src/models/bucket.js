@@ -10,10 +10,6 @@ module.exports = (sequelize, DataTypes) => {
       "path": {
         "type": DataTypes.STRING(1024),
         "allowNull": false
-      },
-      "postProcessor": {
-        "type": DataTypes.STRING(1024),
-        "allowNull": true
       }
     },
     {
