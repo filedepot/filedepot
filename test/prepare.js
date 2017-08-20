@@ -1,7 +1,7 @@
 const os = require('os');
 const fs = require('fs-extra');
 const path = require('path');
-const models = require('../src/models');
+const models = require('filedepot-models');
 
 process.env.TEST_BUCKET_ID = 'XvFgDxAD';
 
