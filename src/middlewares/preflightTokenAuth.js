@@ -50,7 +50,7 @@ module.exports = (req, res, next) => {
       }
 
       req.token = accessToken;
-      req.key = accessToken.key;
+      req.key = accessToken.Key;
       next();
       return null;
     })
