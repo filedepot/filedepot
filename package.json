@@ -1,6 +1,6 @@
 {
   "name": "filedepot",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "FileDepot is an open-sourced and self-managed file storage API service.",
   "main": "bin/www",
   "scripts": {
