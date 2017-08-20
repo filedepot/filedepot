@@ -5,7 +5,8 @@
   "main": "bin/cli",
   "scripts": {
     "start": "node bin/www",
-    "test": "gulp lint && mocha"
+    "test": "npm run lint && mocha",
+    "lint": "eslint test src"
   },
   "author": "Sam-Mauris Yong",
   "repository": "https://github.com/mauris/filedepot",
@@ -27,6 +28,8 @@
     "debug": "^2.6.8",
     "dotenv": "^2.0.0",
     "express": "^4.15.4",
+    "filedepot-models": "^1.0.0",
+    "fs-extra": "^4.0.1",
     "helmet": "^3.8.1",
     "jsonwebtoken": "^7.4.2",
     "moment": "^2.18.1",
@@ -38,7 +41,7 @@
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
     "del": "^2.2.2",
-    "fs-extra": "^4.0.1",
+    "eslint": "^4.5.0",
     "mocha": "^3.5.0"
   }
 }
