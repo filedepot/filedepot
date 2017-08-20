@@ -13,7 +13,13 @@ if (process.env.NODE_ENV === 'production') {
   if (process.env.HTTPS_ENABLE_REDIRECT) {
     app.use((req, res, next) => {
       if (!req.secure) {
-        return res.redirect(['https://', req.get('Host'), req.url].join(''));
+        let destinationArray = [
+          'https://',
+          req.get('Host'),
+          req.url
+        ];
+        return res
+          .redirect(destinationArray.join(''));
       }
       return next();
     });
@@ -25,7 +31,10 @@ if (process.env.USING_PROXY) {
 }
 
 if (!process.env.LOG_SILENT) {
-  app.use(logger(process.env.LOG_FORMAT || (process.env.NODE_ENV === 'production' ? 'combined' : 'dev')));
+  let defaultLoggingFormat = process.env.NODE_ENV === 'production'
+    ? 'combined'
+    : 'dev';
+  app.use(logger(process.env.LOG_FORMAT || defaultLoggingFormat));
 }
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -44,8 +53,9 @@ app.use((req, res, next) => {
 // development error handler
 // will print stacktrace
 if (process.env.NODE_ENV === 'development') {
+  // eslint-disable-next-line max-params
   app.use((err, req, res, next) => {
-    res
+    return res
       .status(err.status || 500)
       .json({
         "msg": err.message,
@@ -57,8 +67,9 @@ if (process.env.NODE_ENV === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
+// eslint-disable-next-line max-params
 app.use((err, req, res, next) => {
-  res
+  return res
     .status(err.status || 500)
     .json({
       "msg": err.message,
