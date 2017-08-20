@@ -14,7 +14,8 @@
     "node": "^6.3.0"
   },
   "bin": {
-    "filedepot": "bin/cli"
+    "filedepot": "bin/cli",
+    "filedepot-list": "bin/cli-list.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
