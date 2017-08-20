@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 require('dotenv').config({ silent: true });
 const program = require('commander');
 const models = require('../src/models');
