@@ -1,6 +1,6 @@
 {
   "name": "filedepot",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "FileDepot is an open-sourced and self-managed file storage API service.",
   "main": "bin/cli",
   "scripts": {
@@ -14,7 +14,7 @@
     "node": "^6.3.0"
   },
   "bin": {
-    "filedepot": "./bin/cli"
+    "filedepot": "bin/cli"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
