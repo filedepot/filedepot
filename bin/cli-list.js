@@ -2,7 +2,7 @@
 
 require('dotenv').config({ silent: true });
 const program = require('commander');
-const models = require('../src/models');
+const models = require('filedepot-models');
 require('console.table');
 
 program
