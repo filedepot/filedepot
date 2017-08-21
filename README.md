@@ -1,6 +1,6 @@
 ![FileDepot](http://i.imgur.com/lYOpp7J.png)
 
-[![Build Status](https://travis-ci.org/mauris/filedepot.svg?branch=master)](https://travis-ci.org/mauris/filedepot)
+[![Build Status](https://travis-ci.org/filedepot/filedepot.svg?branch=master)](https://travis-ci.org/filedepot/filedepot)
 
 FileDepot is a self-managed object storage API service.
 
