@@ -43,7 +43,7 @@ module.exports = (req, res, next) => {
         throw new Error('Token has expired');
       }
 
-      let reqMethod = req.headers['Access-Control-Request-Method'].toLowerCase();
+      let reqMethod = req.headers['access-control-request-method'].toLowerCase();
       let methodsArray = accessToken.method.toLowerCase().split(/,/g);
       if (methodsArray.indexOf(reqMethod) === -1) {
         throw new Error('Method not allowed');
