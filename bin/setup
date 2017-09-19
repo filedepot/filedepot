@@ -7,4 +7,5 @@ models.sequelize
   .sync({ logging: console.log })
   .then(() => {
     console.log('Database setup for FileDepot complete.');
+    process.exit(0);
   });
