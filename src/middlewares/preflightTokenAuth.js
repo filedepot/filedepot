@@ -44,8 +44,8 @@ module.exports = (req, res, next) => {
       }
 
       let reqMethod = req.headers['access-control-request-method'].toLowerCase();
-      let methodsArray = accessToken.method.toLowerCase().split(/,/g);
-      if (methodsArray.indexOf(reqMethod) === -1) {
+      let approvedMethod = accessToken.method.toLowerCase();
+      if (reqMethod !== approvedMethod) {
         throw new Error('Method not allowed');
       }
 
