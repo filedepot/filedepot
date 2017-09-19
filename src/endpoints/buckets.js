@@ -25,7 +25,12 @@ module.exports = router;
 
 let preflightCorsDelegate = (req, callback) => {
   let origin = req.header('origin');
-  var corsOptions = { origin: false };
+  let corsOptions = {
+    origin: false,
+    credentials: true,
+    optionsSuccessStatus: 200
+  };
+
   // check origin against access key's origin
   if (origin === req.key.origin) {
     corsOptions.origin = true;
