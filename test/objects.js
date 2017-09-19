@@ -29,7 +29,6 @@ describe('Objects', () => {
           .set('authorization', 'ANY')
           .then((res) => {
             throw new Error();
-            done();
           })
           .catch((err) => {
             let res = err.response;
@@ -79,7 +78,6 @@ describe('Objects', () => {
           .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/what-file.js')
           .then((res) => {
             throw new Error();
-            done();
           })
           .catch((err) => {
             let res = err.response;
@@ -146,7 +144,6 @@ describe('Objects', () => {
           .set('authorization', 'none')
           .then((res) => {
             throw new Error();
-            done();
           })
           .catch((err) => {
             let res = err.response;
@@ -185,7 +182,6 @@ describe('Objects', () => {
           .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .then((res) => {
             throw new Error();
-            done();
           })
           .catch((err) => {
             let res = err.response;

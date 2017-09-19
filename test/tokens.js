@@ -14,7 +14,6 @@ describe('Tokens', () => {
         .get(API_PREFIX + '/tokens')
         .then((res) => {
           throw new Error();
-          done();
         })
         .catch((err) => {
           let res = err.response;
@@ -68,7 +67,6 @@ describe('Tokens', () => {
           })
           .then((res) => {
             throw new Error();
-            done();
           })
           .catch((err) => {
             let res = err.response;

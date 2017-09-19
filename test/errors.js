@@ -14,7 +14,6 @@ describe('Errors', () => {
         .set('Accept', 'application/json')
         .then((res) => {
           throw new Error();
-          done();
         })
         .catch((err) => {
           let res = err.response;
@@ -35,7 +34,6 @@ describe('Errors', () => {
         .set('Accept', 'text/html')
         .then((res) => {
           throw new Error();
-          done();
         })
         .catch((err) => {
           let res = err.response;
