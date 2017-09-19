@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node bin/www",
     "test": "mocha",
-    "lint": "eslint test src"
+    "lint": "eslint test src",
+    "setup": "node bin/setup"
   },
   "author": "Sam-Mauris Yong",
   "repository": "https://github.com/mauris/filedepot",

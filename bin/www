@@ -28,7 +28,7 @@ if (cluster.isMaster && !process.env.SINGLE_THREAD) {
 
   if (models && process.env.DB_SYNC) {
     models.sequelize
-      .sync({logging: console.log})
+      .sync({ logging: console.log })
       .then(startApp);
   } else {
     console.log('[WARN] Starting app, but database not synchronized.');

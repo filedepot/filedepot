@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+require('dotenv').config({ silent: true });
+const models = require("filedepot-models");
+
+models.sequelize
+  .sync({ logging: console.log })
+  .then(() => {
+    console.log('Database setup for FileDepot complete.');
+  });
