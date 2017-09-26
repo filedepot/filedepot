@@ -74,7 +74,7 @@ objectRoute.put(require('../middlewares/tokenAuth'), cors(preflightCorsDelegate)
 
 objectRoute.delete(require('../middlewares/keyAuth'), cors(preflightCorsDelegate), (req, res, next) => {
   let bucketId = req.params.bucketId;
-  let objName = req.params.objName.toLowerCase();
+  let objName = req.params.objName;
 
   req.key.getBucket()
     .then((bucket) => {
@@ -103,7 +103,7 @@ objectRoute.delete(require('../middlewares/keyAuth'), cors(preflightCorsDelegate
 
 objectRoute.get((req, res, next) => {
   let bucketId = req.params.bucketId;
-  let objName = req.params.objName.toLowerCase();
+  let objName = req.params.objName;
 
   models.Bucket
     .findOne({ where: { bucketId: { $eq: bucketId } } })
