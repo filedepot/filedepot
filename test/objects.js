@@ -101,7 +101,7 @@ describe('Objects', () => {
           .then((res) => {
             res.should.have.status(200);
             res.headers.should.have.property('content-type');
-            res.headers['content-type'].should.be.equals('application/javascript');
+            res.headers['content-type'].should.include('application/javascript');
             fs.readFile('test/tokens.js')
               .then((content) => {
                 res.body.equals(content).should.be.equals(true);
