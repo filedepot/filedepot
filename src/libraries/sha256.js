@@ -5,10 +5,9 @@ let sha256 = (content, encoding) => {
   if (!encoding) {
     digestEncoding = 'hex';
   }
-  var hashAlgo = crypto.createHash('sha256');
+  const hashAlgo = crypto.createHash('sha256');
   hashAlgo.update(content);
-  let hashString = hashAlgo.digest(digestEncoding);
-  return hashString;
+  return hashAlgo.digest(digestEncoding);
 };
 
 module.exports = sha256;
