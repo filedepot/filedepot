@@ -10,7 +10,11 @@
     "presetup": "npm install",
     "setup": "node bin/setup"
   },
-  "author": "Sam-Mauris Yong",
+  "author": {
+    "name": "Sam Yong",
+    "email": "samyonggit@gmail.com",
+    "url": "http://mauris.sg/"
+  },
   "repository": "https://github.com/mauris/filedepot",
   "license": "MIT",
   "engines": {
