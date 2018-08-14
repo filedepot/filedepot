@@ -23,15 +23,12 @@ const binaryParser = (res, cb) => {
 describe('Objects', () => {
   describe('PUT /buckets/:id/objects/:objName', () => {
     describe('using invalid credentials', () => {
-      it('should reject the request', (done) => {
+      it('should reject the request', function (done) {
+        this.slow(500);
         chai.request(server)
           .put(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .set('authorization', 'ANY')
           .then((res) => {
-            throw new Error();
-          })
-          .catch((err) => {
-            let res = err.response;
             res.should.have.status(403);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -39,12 +36,14 @@ describe('Objects', () => {
             resData.status.should.be.equals('error');
             resData.should.have.property('msg');
             done();
-          });
+          })
+          .catch(done);
       });
     });
 
     describe('using valid credentials', () => {
-      it('should accept the request and upload the file', (done) => {
+      it('should accept the request and upload the file', function (done) {
+        this.slow(500);
         getToken('PUT', 'path/to/file.js')
           .then((token) => {
             return chai.request(server)
@@ -63,24 +62,18 @@ describe('Objects', () => {
             resData.should.not.have.property('msg');
             done();
           })
-          .catch((err) => {
-            console.log(err);
-            throw err;
-          });
+          .catch(done);
       });
     });
   });
 
   describe('GET /buckets/:id/objects/:objName', () => {
     describe('using non-existent object name', () => {
-      it('should not be available', (done) => {
+      it('should not be available', function (done) {
+        this.slow(500);
         chai.request(server)
           .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/what-file.js')
           .then((res) => {
-            throw new Error();
-          })
-          .catch((err) => {
-            let res = err.response;
             res.should.have.status(404);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -88,12 +81,14 @@ describe('Objects', () => {
             resData.status.should.be.equals('error');
             resData.should.have.property('msg');
             done();
-          });
+          })
+          .catch(done);
       });
     });
 
     describe('using previously uploaded object name', () => {
-      it('should be available', (done) => {
+      it('should be available', function (done) {
+        this.slow(500);
         chai.request(server)
           .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .buffer()
@@ -108,17 +103,15 @@ describe('Objects', () => {
                 done();
               });
           })
-          .catch((err) => {
-            console.log(err);
-            throw err;
-          });
+          .catch(done);
       });
     });
   });
 
   describe('DELETE /buckets/:id/objects/:objName', () => {
     describe('using non-existent object name', () => {
-      it('should simply return ok regardless', (done) => {
+      it('should simply return ok regardless', function (done) {
+        this.slow(500);
         chai.request(server)
           .delete(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/what-file.js')
           .set('authorization', ACCESS_KEY)
@@ -130,23 +123,17 @@ describe('Objects', () => {
             resData.status.should.be.equals('ok');
             done();
           })
-          .catch((err) => {
-            console.log(err);
-            throw err;
-          });
+          .catch(done);
       });
     });
 
     describe('using invalid access key', () => {
-      it('should not be available', (done) => {
+      it('should not be available', function (done) {
+        this.slow(500);
         chai.request(server)
           .delete(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .set('authorization', 'none')
           .then((res) => {
-            throw new Error();
-          })
-          .catch((err) => {
-            let res = err.response;
             res.should.have.status(403);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -154,12 +141,14 @@ describe('Objects', () => {
             resData.status.should.be.equals('error');
             resData.should.have.property('msg');
             done();
-          });
+          })
+          .catch(done);
       });
     });
 
     describe('using valid access key', () => {
-      it('should process the request', (done) => {
+      it('should process the request', function (done) {
+        this.slow(500);
         chai.request(server)
           .delete(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .set('authorization', ACCESS_KEY)
@@ -171,20 +160,14 @@ describe('Objects', () => {
             resData.status.should.be.equals('ok');
             done();
           })
-          .catch((err) => {
-            console.log(err);
-            throw err;
-          });
+          .catch(done);
       });
 
-      it('file should no longer be available', (done) => {
+      it('file should no longer be available', function (done) {
+        this.slow(500);
         chai.request(server)
           .get(API_PREFIX + '/buckets/' + process.env.TEST_BUCKET_ID + '/objects/path/to/file.js')
           .then((res) => {
-            throw new Error();
-          })
-          .catch((err) => {
-            let res = err.response;
             res.should.have.status(404);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -192,7 +175,8 @@ describe('Objects', () => {
             resData.status.should.be.equals('error');
             resData.should.have.property('msg');
             done();
-          });
+          })
+          .catch(done);
       });
     });
   });
