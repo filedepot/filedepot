@@ -9,14 +9,11 @@ const ACCESS_KEY = require('./getToken').accessKey;
 
 describe('Tokens', () => {
   describe('GET /tokens', () => {
-    it('should not be available', (done) => {
+    it('should not be available', function (done) {
+      this.slow(500);
       chai.request(server)
         .get(API_PREFIX + '/tokens')
         .then((res) => {
-          throw new Error();
-        })
-        .catch((err) => {
-          let res = err.response;
           res.should.have.status(404);
           res.text.should.be.a('string');
           let resData = JSON.parse(res.text);
@@ -24,13 +21,15 @@ describe('Tokens', () => {
           resData.status.should.be.equals('error');
           resData.should.have.property('msg');
           done();
-        });
+        })
+        .catch(done);
     });
   });
 
   describe('POST /tokens', () => {
     describe('using valid credentials', () => {
-      it('should create a one-time token', (done) => {
+      it('should create a one-time token', function (done) {
+        this.slow(500);
         chai.request(server)
           .post(API_PREFIX + '/tokens')
           .set('authorization', ACCESS_KEY)
@@ -56,7 +55,8 @@ describe('Tokens', () => {
     });
 
     describe('using invalid credentials', () => {
-      it('should reject the request', (done) => {
+      it('should reject the request', function (done) {
+        this.slow(500);
         chai.request(server)
           .post(API_PREFIX + '/tokens')
           .set('authorization', 'ANY')
@@ -66,10 +66,6 @@ describe('Tokens', () => {
             ipAddress: '::1'
           })
           .then((res) => {
-            throw new Error();
-          })
-          .catch((err) => {
-            let res = err.response;
             res.should.have.status(403);
             res.text.should.be.a('string');
             let resData = JSON.parse(res.text);
@@ -77,7 +73,8 @@ describe('Tokens', () => {
             resData.status.should.be.equals('error');
             resData.should.have.property('msg');
             done();
-          });
+          })
+          .catch(done);
       });
     });
   });
